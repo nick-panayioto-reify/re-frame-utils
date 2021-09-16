@@ -106,6 +106,13 @@
       (let [track (new-reagent-track track)]
         (swap! register assoc id track)))))
 
+(defn register-once-fx
+  [track-or-tracks]
+  (doseq [{:keys [id] :as track} (ensure-vec track-or-tracks)]
+    (when-not (contains? @register id)
+      (let [track (new-reagent-track track)]
+        (swap! register assoc id track)))))
+
 
 (defn dispose-fx
   [track-or-tracks]
@@ -120,4 +127,5 @@
 ;;
 
 (re-frame/reg-fx ::register register-fx)
+(re-frame/reg-fx ::register-once register-once-fx)
 (re-frame/reg-fx ::dispose dispose-fx)
