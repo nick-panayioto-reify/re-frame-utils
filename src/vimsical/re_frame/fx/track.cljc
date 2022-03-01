@@ -79,12 +79,12 @@
   [{:keys [subscription event-fn dispatch-first?] :or {dispatch-first? true}}]
   {:pre [(vector? subscription) (ifn? event-fn)]}
   #?(:cljs
-     (let [first-time-ref? (atom true)]
+     (let [first-time-ref (atom true)]
        (ratom/track!
         (fn []
           (let [sub-value @(re-frame/subscribe subscription)
                 first-time? @first-time-ref]
-            (reset! first-time-ref? false)
+            (reset! first-time-ref false)
             (when-some [event-vector (event-fn sub-value)]
               (when (or dispatch-first?
                         (not first-time?))
